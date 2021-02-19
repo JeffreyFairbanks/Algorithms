@@ -40,9 +40,8 @@ int main(int argc, char* argv[])   //gives us those nice cmd line arguments!
 				arr[i - 1] = stoi(argv[i]);         //incriment through and put into the array.. 
 			}
 
-       int nsize = sizeof(arr) / sizeof(arr[0]);   
-			 std::cout << "Minimum number of multiplications is %d ", MatrixChainOrder(arr, 1, nsize);;               //call our function so that we can let the real fun begin!
-			// std::cout << " Parenthesis: " << printParenthesis(1, n - 1, n, (int*)bracket, name);                          //have to figure out how to call this....
+  		std::cout << "Minimum number of multiplications is %d ", MatrixChainOrder(arr, 1, n);;               //call our function so that we can let the real fun begin!
+		  std::cout << " Parenthesis: " << printParenthesis(1, n - 1, n, (int*)bracket, name); //?????        //have to figure out how to call this....
 
       std::cin.get();     //pause for effect
 			file.close();       // close our file cause we about to be out!
@@ -71,7 +70,7 @@ int MatrixChainOrder(int p[], int i, int j)
 	int min = INT_MAX;
 	int count;
 
-	//int bracket[j][j];
+	//int *bracket = new int[j][j];             //somehow need to be able to make this array with the indexes???
 
 	// place parenthesis at different places between first
 	// and last matrix, recursively calculate count of
@@ -94,7 +93,7 @@ int MatrixChainOrder(int p[], int i, int j)
 
 // Function for printing the optimal
 // parenthesization of a matrix chain product
-void printParenthesis(int i, int j, int n, int* bracket, char& name)
+void printParenthesis(int i, int j, int n, int* bracket, char& name)             //need to figure out how to pass in bracket and name still 
 {
 	// If only one matrix left in current segment
 	if (i == j) {
