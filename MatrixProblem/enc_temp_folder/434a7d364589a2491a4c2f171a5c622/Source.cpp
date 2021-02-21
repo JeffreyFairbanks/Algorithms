@@ -81,7 +81,7 @@ int MatrixChainOrder(int p[], int i, int j)
 	}
 
 	std::cout << endl;
-	std::cout << "Optimalization of the Parenthesis is: ", ParenthesisOptimization(p, 1, j);         // tell the user what the best parenthesis layout is. 
+	std::cout << "Optimalization of the Parenthesis is: ", ParenthesisOptimization(&p, 1, j);         // tell the user what the best parenthesis layout is. 
 	//??????????
 
 
