@@ -4,6 +4,7 @@
 #include<string>
 #include<stdio.h>
 #include<limits.h>
+#include<vector>
   
 
 using namespace std;
@@ -16,37 +17,49 @@ Code Adapted with help from Corbin, Venkatesan Prabu, Yasin Zafar and Kyle Dunca
 /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 /*::  Function Prototypes                                     ::*/
 /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int MatrixChainOrder(int p[], int i, int j);
-void ParenthesisOptimization(int** arr, int i, int j);
+void matrixChainOrder(int p[], int n);
+void printParenthesis(int i, int j, int n, int** bracket, char& name);
+void printMatrixTable(int** arr, int n);
+
 
 int main(int argc, char* argv[])  //gives us those nice cmd line arguments!
 {
-	try {
-		if (argc <= 2) // argc should be 2 for correct execution
-			// We print argv[0] assuming it is the program name
-			cout << "\nUsage: " << argv[0] << " <Matrix Size1> <Matrix Size2> ...[Matrix SizeN]\nArguements in angled brackets '<, >' are required, while arguements in square brackets '[, ]' are not.\n";
-		else {
-			//start the work 
-			const int n = argc - 2;
+  if (argc > 1) // If there is more than 1 arg, then there is enough.
+  {
 
-			int* arr = new int[n + 1];         //dynamically allowcating array
+	  try {
+		//start the work 
+			
+    //we want to make a vector here to capture the values from the user.
+      vector<int> userInput;
 
 
-			for (int i = 1; i - 1 <= n; i++)
+      
+			for (int i = 1; i < argc; i++)
 			{
-				arr[i - 1] = stoi(argv[i]);        //incriment through and put into the array..
-			}
+        string input = argv[i];
+        userInput.push_back(stoi(input));
+      }
+
+      int* arr = new int[userInput.size() - 1];
 
 
-			std::cout << "Minimum number of multiplications is: " << MatrixChainOrder(arr,1, n);               //call our function so that we can let the real fun begin!
+      for (int i = 0; i < userInput.size(); i++)
+      {
+        arr[i] = userInput[i];
+
+      }
+
+			matrixChainOrder(arr, userInput.size());               //call our function so that we can let the real fun begin!
+
 		  std::cout << endl;
 
 		}
-	}
-	catch (exception e) {
-		cout << "You done messed up... Please make sure you are entering integers for the matrix size!";
-	}
+    catch (exception e) {
+      cout << "You done messed up... Please make sure you are entering integers for the matrix size!";
+    }
 
+	}
 	std::cin.get();     //pause for effect
 	return 0;
 }
@@ -55,62 +68,122 @@ int main(int argc, char* argv[])  //gives us those nice cmd line arguments!
 /*::  Functions                                               ::*/
 /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-  // TAKEN WITH HELP FROM https://www.wikitechy.com/technology/python-programming-matrix-chain-multiplication/
-	//		and help from https://www.geeksforgeeks.org/printing-brackets-matrix-chain-multiplication-problem/ 
- //Matrix Ai has dimension p[i-1] x p[i] for i = 1..n
-int MatrixChainOrder(int p[], int i, int j)
+/// <summary>
+/// ************************************************************
+/// </summary>
+/// <param name="p"></param>
+/// <param name="n"></param>
+void matrixChainOrder(int p[], int n)
 {
-	if (i == j)
-		return 0;
-	int k;
-	int min = INT_MAX;  //make sure that nothing is smaller when we first setup this min value
-	int count;
+	//dynamically allowcate double pointer
+	int** m = new int*[n];
+	int** bracket = new int*[n];
 
-	// place parenthesis at different places between first
-	// and last matrix, recursively calculate count of
-	// multiplications for each parenthesis placement and
-	// return the minimum count
-	for (k = i; k < j; k++)
-	{
-		count = MatrixChainOrder(p, i, k) +   //recursive functions here
-			MatrixChainOrder(p, k + 1, j) +
-			p[i - 1] * p[k] * p[j];
+  for (int i = 0; i < n; i++)
+  {
+    m[i] = new int[n];
+    bracket[i] = new int[n];
+  }
 
-		if (count < min)             //make sure that we grab the smallest 
-			min = count;
-	}
+  // cost is zero when multiplying one matrix. 
+  for (int i = 1; i < n; i++)
+    m[i][i] = 0;
 
-	std::cout << endl;
-	std::cout << "Optimalization of the Parenthesis is: ", ParenthesisOptimization(p, 1, j);         // tell the user what the best parenthesis layout is. 
-	//??????????
+  // L is chain length. 
+  for (int L = 2; L < n; L++)
+  {
+    for (int i = 1; i < n - L + 1; i++)
+    {
+      int j = i + L - 1;
+      m[i][j] = INT_MAX;
+      for (int k = i; k <= j - 1; k++)
+      {
+        // q = cost/scalar multiplications 
+        int q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j];
+        if (q < m[i][j])
+        {
+          m[i][j] = q;
 
+          // Each entry bracket[i,j]=k shows 
+          // where to split the product arr 
+          // i,i+1....j for the minimum cost. 
+          bracket[i][j] = k;
+        }
+      }
+    }
+  }
 
-	// Return minimum count
-	return min;
+  // The first matrix is printed as 'A', next as 'B', 
+ // and so on 
+  char name = 'A';
+
+  cout << "Optimal values \n";
+  printMatrixTable(m, n);
+
+  cout << "decsision table: \n";
+  printMatrixTable(bracket, n);
+
+	cout << "Optimal Parenthesization is : ";
+	printParenthesis(1, n - 1, n, bracket, name);
+	cout << endl;
+  cout << "nOptimal Cost is : " << m[1][n - 1];
 }
-
 
 
 /// <summary>
-/// This function is here in order to show the user the optimal places that the parenthesis should be.
+/// Function for printing the optimal parenthesization of a matrix chain product 
 /// </summary>
-/// <param name="arr"> This is our array that was read in from the cmd line arguments. </param>
-/// <param name="i"> incrimentor i </param>
-/// <param name="j"> incrimentor j </param>
-void ParenthesisOptimization(int **arr, int i, int j)
+/// <param name="i"></param>
+/// <param name="j"></param>
+/// <param name="n"></param>
+/// <param name="bracket"></param>
+/// <param name="name"></param>
+void printParenthesis(int i, int j, int n, int** bracket, char& name)
 {
-	if (i == j)
-	{
-		std::cout << "A" << i;                                    //A because good effort.
-	}
-	else
-	{
-		std::cout << "(";                                          //put that open parenthesis (:
-		ParenthesisOptimization(arr, i, arr[i][j]);          //recursively call with different indexes 
-		ParenthesisOptimization(arr, arr[i][j] + 1, j);      //recursively call with incrimented value
-		std::cout << ")";                                         //put that closed parenthesis :)
-	} 
+  // If only one matrix left in current segment 
+  if (i == j)
+  {
+    cout << name++;
+    return;
+  }
 
+  cout << "(";
+
+  // Recursively put brackets around subexpression 
+  // from i to bracket[i][j]. 
+  // Note that "*((bracket+i*n)+j)" is similar to 
+  // bracket[i][j] 
+  printParenthesis(i, bracket[i][j], n, bracket, name);
+
+  // Recursively put brackets around subexpression 
+  // from bracket[i][j] + 1 to j. 
+  printParenthesis(bracket[i][j] + 1, j, n, bracket, name);
+  cout << ")";
 }
 
 
+/// <summary>
+/// Function in order to print out the Matrix tables for both the Optimal values and Decision Table.
+/// </summary>
+/// <param name="arr"></param>
+/// <param name="n"></param>
+void printMatrixTable(int **arr, int n)    //write more about ************************************
+{
+  for (int i = 0; i < n; i++)
+  {
+    //bool to see if it already did print
+    bool didIPrintThis = false;
+    for (int j = 0; j < n; j++)
+    {
+      if (arr[j][i] > 0)
+      {
+        didIPrintThis = true;
+        cout << arr[j][i] << "\t";
+
+      }
+    }
+    if (didIPrintThis == true)
+      cout << "\n";
+  }
+
+}
