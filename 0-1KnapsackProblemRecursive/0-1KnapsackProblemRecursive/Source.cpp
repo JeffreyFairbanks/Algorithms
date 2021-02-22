@@ -11,15 +11,16 @@ using namespace std;
 //    PROTOTYPES     //
 ///////////////////////
 int knapsack(vector <int> weight, vector <int> value, int maxweight, int index);
+void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, string maximumWeightOfKnapsack);
 
 
 
 int main(int argc, char* argv[])
 {
 	try {
-		if (argc < 4) // we need 5 files in order to run this program.
-			//the argv[0] should be the file name.
-			cout << "\nUsage: " << argv[0] << "Please enter the following CMD Line arguments. {Program}.exe <numberOfItemsInFiles> <maximumWeightOfKnapsack> <weightsFile> <valuesFile>    \n";
+		if (argc < 4) // we need 4 files in order to run this program.
+			// Tell the user what went wrong. 
+			cout << "\nUsage: " << argv[0] << "Please enter the following CMD Line arguments. <numberOfItemsInFiles> <maximumWeightOfKnapsack> <weightsFile> <valuesFile>    \n";
 		else {
 			//here is where we will read in the actual cmd line arguments.
 
@@ -31,72 +32,30 @@ int main(int argc, char* argv[])
 			cout << "Maximum Weight Of The Knapsack: " << argv[2] << endl; //puts the maximumWeightOfKnapsack into a variable
 			string maximumWeightOfKnapsack = argv[2];
 
-			//now we will want to open some files and put them into vectors here. This will help us grab arvg[3] and argv[4].
-			vector <int> weight(stoi(numberOfItemsInFile)), value(stoi(numberOfItemsInFile));
+			//function to read the files and print the answer.
+			readFromCmdLineFile(argc, argv, numberOfItemsInFile, maximumWeightOfKnapsack); //the greatest function in this repo
 
-			fstream file(argv[3]); //Argv[3] is the name of the weights File.			
-				if (file.is_open())
-			  {
-				 //want to use vectors for sake of simplicity of the function we want to use.
-				  cout << "Enter weights of each of the items: ";		
-
-					 for (int i = 0; i < stoi(numberOfItemsInFile); i++) 
-					 {
-							file >> weight[i];
-							cout << weight[i] << " ";
-					 }
-				 file.close();
-				}
-				else 
-				{
-					cout << "The file \"" << argv[3] << "\" cannot be opened.\n";
-          return 100; // 100 is Corbin;s personal error code for when a file cannot be opened. 
-        }
-
-			//Now we wil open the values file.
-
-				fstream files(argv[4]); //Argv[4] is the name of the values File.
-				if (files.is_open())
-				{
-					//Process the file here.
-					//want to use vectors for sake of simplicity of the function we want to use.
-					cout << "\nEnter weights of each of the items: ";
-					for (int j = 0; j < stoi(numberOfItemsInFile); j++)
-					{
-						files >> value[j];
-						cout << value[j] << " ";
-					}
-					files.close();
-				}
-				else
-				{
-					cout << "The file \"" << argv[4] << "\" cannot be opened.\n";
-					return 100; // 100 is Corbin;s personal error code for when a file cannot be opened. 
-				}
-
-			//now we will call the function so that it can be displayed to the user!
-			cout << "\nMaximum value of bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile) - 1);  //still need to pass in the correct weight and values from the above arrays
-
+			
 		}
 	}
 	catch (exception e) {
-		cout << "Something very bad happened. I would be more descriptive but you must have messed something up pretty bad. :( \n";
+		cout << "Something very bad happened. I would be more descriptive but you must have messed something up pretty bad. :( \n";  //sad boi hours 
 	}
 
-	cout << "\nPress Enter to end the program. \n";
-	cin.get();
-	return 0;
+	cout << "\nPress Enter to end the program. \n";   //thank you for coming!
+	cin.get(); //wait for the user to press enter to end the program.
+	return 0; //bye bye 
 }
 
 
 /// <summary>
-/// 
+/// This function will do some maths for us and crunch the numbers to tell us what the maximum value that our knapsack can hold. 
 /// </summary>
-/// <param name="weight"></param>
-/// <param name="value"></param>
-/// <param name="maxweight"></param>
-/// <param name="index"></param>
-/// <returns></returns>
+/// <param name="weight"> weight of each of the items</param>
+/// <param name="value"> The value of each of the items</param>
+/// <param name="maxweight">the maximum weight that our knapsack can hold</param>
+/// <param name="index"> were we are in our vectors</param>
+/// <returns>returns the max value that our knapsack can hold. </returns>
 /// adapted from: https://github.com/kothariji/Dynamic_Programming_Journey/blob/main/DAY-01/0-1%20Knapsack%20Recursion.cpp 
 int knapsack(vector <int> weight, vector <int> value, int maxweight, int index)
 {
@@ -108,13 +67,67 @@ int knapsack(vector <int> weight, vector <int> value, int maxweight, int index)
 		return max(value[index] + knapsack(weight, value, maxweight - weight[index], index - 1), knapsack(weight, value, maxweight, index - 1));
 
 	else
-		return knapsack(weight, value, maxweight, index - 1);
+		return knapsack(weight, value, maxweight, index - 1); // :) 
 }
 
 
-void readFromCmdLineFile()
+/// <summary>
+/// This function allows us to read from the command line files and put them into vectors. At the end of this function,
+/// It will call the knapsack function to complete the program out for us.
+/// </summary>
+/// <param name="argc"> command line number</param>
+/// <param name="argv"> command line value</param>
+/// <param name="numberOfItemsInFile">The number of items that are in the files</param>
+/// <param name="maximumWeightOfKnapsack">The maximum weight that the knapsack can be</param>
+void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, string maximumWeightOfKnapsack)
 {
-	//here we will put that big mess that we had in main and put it all nicely down here :)
 
+//want to use vectors for sake of simplicity of the function we want to use.
+	vector <int> weight(stoi(numberOfItemsInFile)), value(stoi(numberOfItemsInFile));
+
+
+	cout << "Enter weights of each of the items: ";    //print out to user so that they can see the values entered
+	bool printed = false;                              // we only want it to print once.... twice is kind of annoying.
+
+
+	for (int k = 3; k < 5; k++)                        // this is so that it will read through the rest of the cmd arguments so that we can open the file and read
+	{
+		fstream file(argv[k]); //Argv[3] is the name of the weights File and Argv[4] is the name of the values file.		
+
+		if (file.is_open())  //make sure that the file is open.
+		{
+
+			for (int i = 0; i < stoi(numberOfItemsInFile); i++)         //read the file into the correct place here 
+			{	
+				if (argv[k] == argv[3])          //making sure that the argv[3] goes into the correcct weight vector
+				{
+					file >> weight[i];
+					cout << weight[i] << " ";
+				}
+				else                            //otherwise it goes into the value vector
+				{
+					if (!printed)
+					{
+						cout << "Enter the value of each of the items: ";            //tells the user what the following numbers mean.
+						printed = true;
+					}
+					file >> value[i];                //put from the file into the vector
+					cout << value[i] << " ";         //print to user
+				}
+
+			}
+			cout << endl;
+
+			file.close();                       //being sure to close the file before moving onto the next file.
+		}
+		else
+		{
+			cout << "The file \"" << argv[3] << "\" cannot be opened.\n";   //sad day to see this. 
+		}
+
+	}
+
+	//now we will call the knapsack function so that it can be displayed to the user!
+	cout << "\nMaximum value of the bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile) - 1); 
 
 }
