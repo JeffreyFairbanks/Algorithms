@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 				{
 					//Process the file here.
 					//want to use vectors for sake of simplicity of the function we want to use.
-					cout << "\n Enter weights of each of the items: ";
+					cout << "\nEnter weights of each of the items: ";
 					for (int j = 0; j < stoi(numberOfItemsInFile); j++)
 					{
 						files >> value[j];
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 				}
 
 			//now we will call the function so that it can be displayed to the user!
-			cout << "Maximum value of bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile));  //still need to pass in the correct weight and values from the above arrays
+			cout << "\nMaximum value of bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile) - 1);  //still need to pass in the correct weight and values from the above arrays
 
 		}
 	}
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
 		cout << "Something very bad happened. I would be more descriptive but you must have messed something up pretty bad. :( \n";
 	}
 
-	cout << "Press Enter to end the program. \n";
+	cout << "\nPress Enter to end the program. \n";
 	cin.get();
 	return 0;
 }
@@ -109,4 +109,12 @@ int knapsack(vector <int> weight, vector <int> value, int maxweight, int index)
 
 	else
 		return knapsack(weight, value, maxweight, index - 1);
+}
+
+
+void readFromCmdLineFile()
+{
+	//here we will put that big mess that we had in main and put it all nicely down here :)
+
+
 }
