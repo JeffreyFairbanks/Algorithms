@@ -148,7 +148,7 @@ void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 
 	// stores the result of Knapsack 
 	int res = K[n][W];
-	printf("%d\n", res);                                                     //Optimal Solution: {values}
+	printf("%d\n", res);                                                     // Optimal Solution's Value: {value} 
 
 	int total_weight = 0;
 
@@ -182,7 +182,7 @@ void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 	std::sort(optimal_solution.begin(), optimal_solution.end(), [](const int a, const int b) {return a < b; });
 
 	for (int val : optimal_solution)
-		std::cout << "I" << val << ' ';       //what the optimal solution is (what values to were chosen)   Optimal Solution's Value: {value}
+		std::cout << "I" << val << ' ';       //what the optimal solution is (what values to were chosen)   Optimal Solution: {values}
 
 	std::cout << '\n' << "Total weight: " << total_weight << std::endl << std::endl;   // The total weight that the optimal solution uses  Optimal Solution's Weight: {value}
 

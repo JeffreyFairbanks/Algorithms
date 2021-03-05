@@ -135,4 +135,6 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 	cout << endl;
 	cout << recursiveTimesCalled;
 
+	//optimal value is there only thing we get 
+
 }
