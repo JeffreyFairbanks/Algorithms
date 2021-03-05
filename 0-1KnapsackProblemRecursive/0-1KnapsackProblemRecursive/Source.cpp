@@ -10,7 +10,7 @@ using namespace std;
 ///////////////////////
 //    PROTOTYPES     //
 ///////////////////////
-int knapsack(vector <int> weight, vector <int> value, int maxweight, int index);
+int knapsack(vector <int> weight, vector <int> value, int maxweight, int index, int recursiveTimesCalled);
 void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, string maximumWeightOfKnapsack);
 
 
@@ -57,17 +57,19 @@ int main(int argc, char* argv[])
 /// <param name="index"> were we are in our vectors</param>
 /// <returns>returns the max value that our knapsack can hold. </returns>
 /// adapted from: https://github.com/kothariji/Dynamic_Programming_Journey/blob/main/DAY-01/0-1%20Knapsack%20Recursion.cpp 
-int knapsack(vector <int> weight, vector <int> value, int maxweight, int index)
+int knapsack(vector <int> weight, vector <int> value, int maxweight, int index, int recursiveTimesCalled)
 {
+	recursiveTimesCalled++;
+
 	//base condition
 	if ((index < 0) || (maxweight <= 0))
 		return 0;
 
 	if (weight[index] <= maxweight)
-		return max(value[index] + knapsack(weight, value, maxweight - weight[index], index - 1), knapsack(weight, value, maxweight, index - 1));
+		return max(value[index] + knapsack(weight, value, maxweight - weight[index], index - 1, recursiveTimesCalled), knapsack(weight, value, maxweight, index - 1, recursiveTimesCalled));
 
 	else
-		return knapsack(weight, value, maxweight, index - 1); // :) 
+		return knapsack(weight, value, maxweight, index - 1, recursiveTimesCalled); // :) 
 }
 
 
@@ -127,7 +129,10 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 
 	}
 
+	int recursiveTimesCalled = 0;
 	//now we will call the knapsack function so that it can be displayed to the user!
-	cout << "\nMaximum value of the bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile) - 1); 
+	cout << "\nMaximum value of the bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile) - 1, recursiveTimesCalled);
+	cout << endl;
+	cout << recursiveTimesCalled;
 
 }

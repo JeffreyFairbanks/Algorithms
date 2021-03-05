@@ -4,15 +4,18 @@
 #include<vector>
 #include<string>
 #include<fstream>
+#include<algorithm>
 
 using namespace std;
+
+// collaborated with Kyle Duncan. 
 
 ///////////////////////
 //    PROTOTYPES     //
 ///////////////////////
 void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, string maximumWeightOfKnapsack);
-
-
+void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n);
+int max(int a, int b);
 
 int main(int argc, char* argv[])
 {
@@ -33,6 +36,7 @@ int main(int argc, char* argv[])
 
 			//function to read the files and print the answer.
 			readFromCmdLineFile(argc, argv, numberOfItemsInFile, maximumWeightOfKnapsack); //the greatest function in this repo
+
 
 
 		}
@@ -104,10 +108,91 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 	}
 
 
-	//  cout << knapSack(stoi(maximumWeightOfKnapsack), weight, value, stoi(numberOfItemsInFile));
+	print_knapsack(stoi(maximumWeightOfKnapsack), weight, value, stoi(numberOfItemsInFile) - 1);
 
 }
 
+
+// A utility function that returns maximum of two integers 
+int max(int a, int b)
+{ 
+	return (a > b) ? a : b;
+}
+
+
+/// <summary>
+/// Prints the items which are put in a knapsack of capacity W
+/// Adapted from: https://www.geeksforgeeks.org/printing-items-01-knapsack/
+/// </summary>
+/// <param name="W"></param>
+/// <param name="wt"></param>
+/// <param name="val"></param>
+/// <param name="n"></param>
+void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
+{
+	int i, w;
+	std::vector<std::vector<int>> K(n + 1, std::vector<int>(W + 1));
+	std::vector<int> optimal_solution;
+
+	// Build table K[][] in bottom up manner 
+	for (i = 0; i <= n; i++) {
+		for (w = 0; w <= W; w++) {
+			if (i == 0 || w == 0)
+				K[i][w] = 0; // ask Corbin if this counts as a table reference
+			else if (wt[i - 1] <= w)
+				K[i][w] = max(val[i - 1] + K[i - 1][w - wt[i - 1]], K[i - 1][w]);
+			else
+				K[i][w] = K[i - 1][w];
+		}
+	}
+
+	// stores the result of Knapsack 
+	int res = K[n][W];
+	printf("%d\n", res);                                                     //Optimal Solution: {values}
+
+	int total_weight = 0;
+
+	w = W;
+	for (i = n; i > 0 && res > 0; i--) {
+
+		// either the result comes from the top 
+		// (K[i-1][w]) or from (val[i-1] + K[i-1] 
+		// [w-wt[i-1]]) as in Knapsack table. If 
+		// it comes from the latter one/ it means  
+		// the item is included. 
+		if (res == K[i - 1][w])
+			continue;
+		else {
+
+			// This item is included. 
+			optimal_solution.push_back(i);
+
+			// std::cout << wt[i - 1] << ' ';
+
+			total_weight += wt[i - 1];
+			// Since this weight is included its  
+			// value is deducted 
+			res = res - val[i - 1];
+			w = w - wt[i - 1];
+		}
+	}
+
+	std::cout << std::endl;
+
+	std::sort(optimal_solution.begin(), optimal_solution.end(), [](const int a, const int b) {return a < b; });
+
+	for (int val : optimal_solution)
+		std::cout << "I" << val << ' ';       //what the optimal solution is (what values to were chosen)   Optimal Solution's Value: {value}
+
+	std::cout << '\n' << "Total weight: " << total_weight << std::endl << std::endl;   // The total weight that the optimal solution uses  Optimal Solution's Weight: {value}
+
+	for (int i = 0; i <= n; i++)
+	{
+		for (int j = 0; j < K[i].size(); j++)                    // this prints out the table: Dynamic Programming Table: {values}
+			std::cout << K[i][j] << " ";
+		std::cout << std::endl;
+	}
+}
 
 
 
