@@ -115,7 +115,7 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 
 // A utility function that returns maximum of two integers 
 int max(int a, int b)
-{ 
+{
 	return (a > b) ? a : b;
 }
 

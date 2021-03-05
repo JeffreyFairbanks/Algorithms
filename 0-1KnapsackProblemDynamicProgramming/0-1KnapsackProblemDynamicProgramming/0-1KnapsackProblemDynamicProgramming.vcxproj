@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5e926472-07ac-4938-b9bb-27b733a58b5b}</ProjectGuid>
+    <ProjectGuid>{c5b6d20c-413a-4b4d-af08-ffe434882c15}</ProjectGuid>
     <RootNamespace>My01KnapsackProblemDynamicProgramming</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
