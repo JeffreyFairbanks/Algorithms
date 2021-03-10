@@ -27,11 +27,11 @@ int main(int argc, char* argv[])
 			//here is where we will read in the actual cmd line arguments.
 
 			//grabbing the number of items in the file.
-			cout << "Number of items: " << argv[1] << endl;
+			//cout << "Number of items: " << argv[1] << endl;
 			string numberOfItemsInFile = argv[1]; // puts the number of items into a variable
 
 			//grabbing the maximum Weight Of the Knapsack value
-			cout << "Maximum Weight Of The Knapsack: " << argv[2] << endl; //puts the maximumWeightOfKnapsack into a variable
+			//cout << "Maximum Weight Of The Knapsack: " << argv[2] << endl; //puts the maximumWeightOfKnapsack into a variable
 			string maximumWeightOfKnapsack = argv[2];
 
 			//function to read the files and print the answer.
@@ -45,8 +45,6 @@ int main(int argc, char* argv[])
 		cout << "Something very bad happened. I would be more descriptive but you must have messed something up pretty bad. :( \n";  //sad boi hours 
 	}
 
-	cout << "\nPress Enter to end the program. \n";   //thank you for coming!
-	cin.get(); //wait for the user to press enter to end the program.
 	return 0; //bye bye 
 }
 
@@ -66,7 +64,7 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 	vector <int> weight(stoi(numberOfItemsInFile)), value(stoi(numberOfItemsInFile));
 
 
-	cout << "Enter weights of each of the items: ";    //print out to user so that they can see the values entered
+	//cout << "Enter weights of each of the items: ";    //print out to user so that they can see the values entered
 	bool printed = false;                              // we only want it to print once.... twice is kind of annoying.
 
 
@@ -82,21 +80,21 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 				if (argv[k] == argv[3])          //making sure that the argv[3] goes into the correcct weight vector
 				{
 					file >> weight[i];
-					cout << weight[i] << " ";
+					//cout << weight[i] << " ";
 				}
 				else                            //otherwise it goes into the value vector
 				{
 					if (!printed)
 					{
-						cout << "Enter the value of each of the items: ";            //tells the user what the following numbers mean.
+						//cout << "Enter the value of each of the items: ";            //tells the user what the following numbers mean.
 						printed = true;
 					}
 					file >> value[i];                //put from the file into the vector
-					cout << value[i] << " ";         //print to user
+					//cout << value[i] << " ";         //print to user
 				}
 
 			}
-			cout << endl;
+			//cout << endl;
 
 			file.close();                       //being sure to close the file before moving onto the next file.
 		}
@@ -108,7 +106,7 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 	}
 
 
-	print_knapsack(stoi(maximumWeightOfKnapsack), weight, value, stoi(numberOfItemsInFile));
+	print_knapsack(stoi(maximumWeightOfKnapsack), weight, value, stoi(numberOfItemsInFile));  //where the big plays start to pan out. 
 
 }
 
@@ -193,35 +191,37 @@ void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 
 	std::cout << std::endl;
 
+	//sort the optimal solutions vector to prepare for printing. 
 	std::sort(optimal_solution.begin(), optimal_solution.end(), [](const int a, const int b) {return a < b; });
 
 
-	///PRINT EVERYTHING HERE *************************
+	//Now we will print out all the results here: 
 
 
-	// stores the result of Knapsack 
-
-	std::cout << '\n' << "optimal value: " << optimalValue << std::endl << std::endl;         // Optimal Solution's Value: {value} 
-
+//This prints out the Optimal Solution : {values}
+	std::cout << "The optimal Solution is: ";
 	for (int val : optimal_solution)
-		std::cout << "I" << val << ' ';       //what the optimal solution is (what values to were chosen)   Optimal Solution: {values}
+		std::cout << "I" << val << ' ';       //what values to were chosen
 
-	std::cout << '\n' << "Total weight: " << total_weight << std::endl << std::endl;   // The total weight that the optimal solution uses  Optimal Solution's Weight: {value}
+	std::cout << endl;
+//Optimal Solution's Weight: {value}
+	std::cout << "Optimal Solution's Weight:  " << total_weight << std::endl;   
 
-	std::cout << '\n' << "Table References: " << tableReferences << std::endl << std::endl;
+//This prints out the Optimal Solution's Value: {value} 
+	std::cout << "Optimal Solution's Value: " << optimalValue << std::endl;         
 
+//This prints out the Number of Table References : {value}
+	std::cout << "Number of Table References: " << tableReferences << std::endl;
 
-	
+std:cout << endl;
 
+// this prints out the table: Dynamic Programming Table: {values}
 	for (int i = 0; i <= n; i++)
 	{
-		for (int j = 0; j < K[i].size(); j++)                    // this prints out the table: Dynamic Programming Table: {values}
+		for (int j = 0; j < K[i].size(); j++)                    
 			std::cout << K[i][j] << " ";
 		std::cout << std::endl;
 	}
-
-
-	/////END PRINTING OUT EVERYTHING HERE 
 
 }
 
