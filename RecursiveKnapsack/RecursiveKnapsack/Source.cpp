@@ -140,7 +140,7 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 
 
 	/*for (int val : optimalSolution)
-		std::cout << "I" << val << ' ';*/
+		std::cout << "I" << val << ' ';*/ 
 
 
 }
