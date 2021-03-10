@@ -108,7 +108,7 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 	}
 
 
-	print_knapsack(stoi(maximumWeightOfKnapsack), weight, value, stoi(numberOfItemsInFile) - 1);
+	print_knapsack(stoi(maximumWeightOfKnapsack), weight, value, stoi(numberOfItemsInFile));
 
 }
 
@@ -131,6 +131,7 @@ int max(int a, int b)
 void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 {
 	int i, w;
+	int tableReferences = 0;
 	std::vector<std::vector<int>> K(n + 1, std::vector<int>(W + 1));
 	std::vector<int> optimal_solution;
 
@@ -138,17 +139,27 @@ void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 	for (i = 0; i <= n; i++) {
 		for (w = 0; w <= W; w++) {
 			if (i == 0 || w == 0)
+			{
 				K[i][w] = 0; // ask Corbin if this counts as a table reference
+				tableReferences++;
+			}
 			else if (wt[i - 1] <= w)
+			{
 				K[i][w] = max(val[i - 1] + K[i - 1][w - wt[i - 1]], K[i - 1][w]);
+			tableReferences+=  3;
+			}
 			else
+			{
 				K[i][w] = K[i - 1][w];
+				tableReferences += 2;
+		  }
 		}
 	}
 
-	// stores the result of Knapsack 
 	int res = K[n][W];
-	printf("%d\n", res);                                                     // Optimal Solution's Value: {value} 
+	int  optimalValue = res;
+	tableReferences++;
+
 
 	int total_weight = 0;
 
@@ -161,7 +172,10 @@ void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 		// it comes from the latter one/ it means  
 		// the item is included. 
 		if (res == K[i - 1][w])
+		{
+			tableReferences++;
 			continue;
+		}
 		else {
 
 			// This item is included. 
@@ -181,10 +195,23 @@ void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 
 	std::sort(optimal_solution.begin(), optimal_solution.end(), [](const int a, const int b) {return a < b; });
 
+
+	///PRINT EVERYTHING HERE *************************
+
+
+	// stores the result of Knapsack 
+
+	std::cout << '\n' << "optimal value: " << optimalValue << std::endl << std::endl;         // Optimal Solution's Value: {value} 
+
 	for (int val : optimal_solution)
 		std::cout << "I" << val << ' ';       //what the optimal solution is (what values to were chosen)   Optimal Solution: {values}
 
 	std::cout << '\n' << "Total weight: " << total_weight << std::endl << std::endl;   // The total weight that the optimal solution uses  Optimal Solution's Weight: {value}
+
+	std::cout << '\n' << "Table References: " << tableReferences << std::endl << std::endl;
+
+
+	
 
 	for (int i = 0; i <= n; i++)
 	{
@@ -192,11 +219,9 @@ void print_knapsack(int W, std::vector<int> wt, std::vector<int> val, int n)
 			std::cout << K[i][j] << " ";
 		std::cout << std::endl;
 	}
+
+
+	/////END PRINTING OUT EVERYTHING HERE 
+
 }
-
-
-
-// only need Number of Table References: {value}
-
-
 
