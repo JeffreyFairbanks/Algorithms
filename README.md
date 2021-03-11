@@ -47,5 +47,14 @@ EXAMPLE OF WHAT WOULD BE PASSED IN:
 "5" "5" ".../weights.txt" ".../values.txt"
 
 
+Example solution: 
+Arguments passed in: "5" "5" ".../weights.txt" ".../values.txt"
+   SOLUTIONS  | ANS
+------------- | -------------
+The optimal Solution is:  | I3 I4
+Optimal Solution's Weight:  | 5
+Optimal Solution's Value:   | 14
+Number of Table References:  | 32
+
 
 
