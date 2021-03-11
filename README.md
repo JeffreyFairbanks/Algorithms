@@ -16,7 +16,9 @@ In order to run the program correctly, there are a few
 command line parameters that must be passed in.
 There are 4 arguments. The arguments follow this layout:
 numberOfItemsInFiles=5, maximumWeightOfKnapsack=5, weightsFile=weights1.txt, valuesFile=values1.txt
+
 EXAMPLE OF WHAT WOULD BE PASSED IN:
+
 "5" "5" ".../weights.txt" ".../values.txt"
 
 Example solution: 
