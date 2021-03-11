@@ -10,7 +10,7 @@ using namespace std;
 ///////////////////////
 //    PROTOTYPES     //
 ///////////////////////
-int knapsack(vector <int> weight, vector <int> value, int maxweight, int index, int &recursiveTimesCalled);
+int knapsack(vector <int> weight, vector <int> value, int maxweight, int index, int &recursiveTimesCalled, vector<int>& OptimalSolutions);
 void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, string maximumWeightOfKnapsack);
 
 
@@ -57,19 +57,45 @@ int main(int argc, char* argv[])
 /// <param name="index"> were we are in our vectors</param>
 /// <returns>returns the max value that our knapsack can hold. </returns>
 /// adapted from: https://github.com/kothariji/Dynamic_Programming_Journey/blob/main/DAY-01/0-1%20Knapsack%20Recursion.cpp 
-int knapsack(vector <int> weight, vector <int> value, int maxweight, int index, int &recursiveTimesCalled)
+int knapsack(vector <int> weight, vector <int> value, int maxweight, int index, int &recursiveTimesCalled, vector<int>& OptimalSolutions )
 {
 	recursiveTimesCalled++;
 
 	//base condition
-	if ((index < 0) || (maxweight <= 0))
+	if ((index == 0) || (maxweight == 0))
 		return 0;
 
-	if (weight[index] <= maxweight)
-		return max(value[index] + knapsack(weight, value, maxweight - weight[index], index - 1, recursiveTimesCalled), knapsack(weight, value, maxweight, index - 1, recursiveTimesCalled));
-
+	if (weight[index-1] > maxweight)
+	{
+		return knapsack(weight, value, maxweight, index - 1, ++recursiveTimesCalled, OptimalSolutions); // :) 
+	}
 	else
-		return knapsack(weight, value, maxweight, index - 1, recursiveTimesCalled); // :) 
+	{
+		int rightSide = OptimalSolutions.size();
+		int right = value[index-1] + knapsack(weight, value, maxweight - weight[index-1], index - 1, ++recursiveTimesCalled, OptimalSolutions);
+
+		int leftSide = OptimalSolutions.size();
+		int left = knapsack(weight, value, maxweight, index - 1, ++recursiveTimesCalled, OptimalSolutions);
+
+		if (right > left)
+		{
+			if (OptimalSolutions.size() > leftSide)
+			{
+				OptimalSolutions.erase(OptimalSolutions.begin() + leftSide, OptimalSolutions.begin() + OptimalSolutions.size());
+  		}
+			OptimalSolutions.push_back(index);
+			return right;
+
+		}
+		else 
+		{
+			if (leftSide > rightSide)
+			{
+				OptimalSolutions.erase(OptimalSolutions.begin() + rightSide, OptimalSolutions.begin() + leftSide);
+			}
+			return left;
+		}
+	}
 }
 
 
@@ -131,16 +157,27 @@ void readFromCmdLineFile(int argc, char* argv[], string numberOfItemsInFile, str
 
 	}
 
-	int recursiveTimesCalled = -1;   // set at -1 cause later we incriment one too many 
+	int recursiveTimesCalled = 0;  
+	vector<int> OptimalSolutions;
+	int optimalWeight = 0;
 
 	//now we will call the knapsack function so that it can be displayed to the user!
-	cout << "\nMaximum value of the bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile) - 1, recursiveTimesCalled);
+	cout << "\nMaximum value of the bag is: " << knapsack(weight, value, stoi(maximumWeightOfKnapsack), stoi(numberOfItemsInFile) - 1, ++recursiveTimesCalled, OptimalSolutions);
 	cout << endl;
-	cout << "Recurisve times called: " << recursiveTimesCalled << endl;
+	cout << "Recurisve times called: " << recursiveTimesCalled << endl;  //prints out the recursive times called 
 
+	for (int index : OptimalSolutions)                  
+	{
+		optimalWeight += weight[index - 1];
+	}
 
-	/*for (int val : optimalSolution)
-		std::cout << "I" << val << ' ';*/ 
+	cout << optimalWeight;   //prints out the optimal weight here 
+
+	cout << endl;
+
+	for (int Items : OptimalSolutions)                    //prints out the optimal solutions (which ones we should grab).
+		cout << "I" << Items << " ";
+
 
 
 }
