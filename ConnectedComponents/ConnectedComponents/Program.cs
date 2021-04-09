@@ -14,14 +14,8 @@ namespace ConnectedComponents
     [STAThread]
     public static void Main(String[] args)
     {
-      /* Let us create following weighted graph
-              10
-          0--------1
-          | \ |
-      6| 5\ |15
-          | \ |
-          2--------3
-              4 */
+     
+      
       int V = 4; // Number of vertices in graph
       int E = 5; // Number of edges in graph
       Graph graph = new Graph(V, E);
@@ -60,8 +54,7 @@ namespace ConnectedComponents
 
 
 public class Graph
-  {
-
+{
     // A class to represent a graph edge
     public class Edge : IComparable<Edge>
     {
@@ -192,20 +185,29 @@ public class Graph
       Console.WriteLine("Following are the edges in "
                         + "the constructed MST");
 
-    int minimumCost = 0;
-        for (i = 0; i < e; ++i)
-      {
-        Console.WriteLine(result[i].src + " -- "
-                          + result[i].dest
-                          + " == " + result[i].weight);
-        minimumCost += result[i].weight;
-      }
+      int minimumCost = 0;
+          for (i = 0; i < e; ++i)
+          {
+          Console.WriteLine(result[i].src + " -- "
+                            + result[i].dest
+                            + " == " + result[i].weight);
+          minimumCost += result[i].weight;
+          }
 
       Console.WriteLine("Minimum Cost Spanning Tree"
                         + minimumCost);
       Console.ReadLine();
     }
-  }
+}
+
+
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+public class Root
+{
+  public List<string> CountyNames { get; set; }
+  public List<string> Domain { get; set; }
+  public List<List<int>> Graph { get; set; }
+}
 
 
 
