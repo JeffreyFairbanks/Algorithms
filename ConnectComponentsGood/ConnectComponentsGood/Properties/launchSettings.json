@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ConnectComponentsGood": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\jgfso\\Downloads\\ID1883Map (1).json\""
+    }
+  }
+}
