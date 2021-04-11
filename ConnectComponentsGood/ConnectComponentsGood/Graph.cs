@@ -4,13 +4,14 @@ using System.Text;
 
 namespace ConnectComponentsGood
 {
+  //all of this was adapted from: https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/
 
   public class Graph
   {
     // A class to represent a graph edge
     public class Edge : IComparable<Edge>
     {
-      public int src, dest, weight;
+      public int source, destination, weight;
 
       // Comparator function used for sorting edges
       // based on their weight
@@ -121,8 +122,8 @@ namespace ConnectComponentsGood
         Edge next_edge = new Edge();
         next_edge = edge[i++];
 
-        int x = find(subsets, next_edge.src);
-        int y = find(subsets, next_edge.dest);
+        int x = find(subsets, next_edge.source);
+        int y = find(subsets, next_edge.destination);
 
         // If including this edge does't cause cycle,
         // include it in result and increment the index
@@ -137,13 +138,12 @@ namespace ConnectComponentsGood
 
       // print the contents of result[] to display
       // the built MST
-      Console.WriteLine("Following are the edges in "
-                        + "the constructed MST");
+      Console.WriteLine("Results of the Minimum Spanning Tree. \n");
 
       int minimumCost = 0;
       for (i = 0; i < e; ++i)
       {
-        string source = Dict[result[i].src], destination = Dict[result[i].dest];
+        string source = Dict[result[i].source], destination = Dict[result[i].destination];
         int weight = result[i].weight;
 
 
@@ -152,11 +152,12 @@ namespace ConnectComponentsGood
                           + " == " + weight);
         minimumCost += result[i].weight;
       }
-
-      Console.WriteLine("Minimum Cost Spanning Tree "
-                        + minimumCost);
+      Console.WriteLine(" ------------------------------------ ");
+      Console.WriteLine("Minimum Cost of the Spanning Tree:  " + minimumCost);
+      Console.WriteLine(" ------------------------------------ ");
       Console.ReadLine();
     }
+
   }
 
 }
